@@ -7,6 +7,7 @@
     <title>나만의 추억앨범</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Sans+KR:wght@100..900&display=swap');
@@ -53,6 +54,7 @@
           padding: 20px;
           box-shadow: 0px 0px 3px 0px blue;
           border-radius: 5px;
+          display: none;
         }
         .mybtn {
             display: flex;  
@@ -64,13 +66,23 @@
           margin-right: 5px;
         }
     </style>
+    
+    <script>
+      function memory_save_btn_click() {
+        $('.mypostingbox').toggle();
+      }
+
+      function close_btn_click() {
+        $('.mypostingbox').hide();
+      }
+    </script>
 
 </head>
 
 <body>
     <div class="mytitle">
         <h1>나만의 추억앨범</h1>
-        <button>추억 저장하기</button>
+        <button onclick="memory_save_btn_click()">추억 저장하기</button>
     </div>
 
     <div class="mypostingbox">
@@ -92,7 +104,7 @@
       </div>
       <div class="mybtn">
         <button type="button" class="btn btn-dark">기록하기</button>
-        <button type="button" class="btn btn-outline-dark">닫기</button>
+        <button onclick="close_btn_click()" type="button" class="btn btn-outline-dark">닫기</button>
       </div>
     </div>
 
