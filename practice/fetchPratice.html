@@ -11,7 +11,12 @@
             fetch(url).
             then(res => res.json()).
             then(data => {
-                console.log(data['RealtimeCityAir']['row'][0]);
+                let rows = data['RealtimeCityAir']['row'];
+                rows.forEach(r => {
+                    let gu_name = r['MSRSTE_NM'];
+                    let gu_mise = r['IDEX_NM'];
+                    console.log(gu_name, gu_mise);
+                });
             })
         }
     </script>
