@@ -58,6 +58,35 @@
         function record() {
             $('.mypostingbox').toggle();
         }
+        function makeCard() {
+            let imgUrl = $('#movie-imgUrl').val();
+            let title = $('#movie-title').val();
+            let star = $('#movie-star').val();
+            let recommand = $('#movie-recommand').val();
+
+            let temp_html = `
+                <div class="col">
+                <div class="card h-100">
+                    <img src="${imgUrl}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                    <h5 class="card-title">${title}</h5>
+                    <p class="card-text">${star}</p>
+                    <p class="card-text">${recommand}</p>
+                    </div>
+                </div>
+                </div>
+            `;
+            
+            $('#movieCard').append(temp_html);
+            
+            // 값을 비우는 방법 
+            $('#movie-imgUrl').val('');
+            $('#movie-title').val('');
+            $('#movie-star').val('');
+            $('#movie-recommand').val('');
+
+            $('.mypostingbox').toggle();
+        }
     </script>
 </head>
 <body>
@@ -101,33 +130,33 @@
 
     <div class="mypostingbox">
         <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="floatingInput" placeholder="영화 이미지 주소">
+            <input type="text" class="form-control" id="movie-imgUrl" placeholder="영화 이미지 주소">
             <label for="floatingInput">영화 이미지 주소</label>
         </div>
         <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="floatingInput" placeholder="영화 제목">
+            <input type="text" class="form-control" id="movie-title" placeholder="영화 제목">
             <label for="floatingInput">영화 제목</label>
         </div>
         <div class="input-group mb-3">
             <label class="input-group-text" for="inputGroupSelect01">별점</label>
-            <select class="form-select" id="inputGroupSelect01">
+            <select class="form-select" id="movie-star">
                 <option selected>별점 선택</option>
-                <option value="1">⭐</option>
-                <option value="2">⭐⭐</option>
-                <option value="3">⭐⭐⭐</option>
-                <option value="4">⭐⭐⭐⭐</option>
-                <option value="5">⭐⭐⭐⭐⭐</option>
+                <option value="⭐">⭐</option>
+                <option value="⭐⭐">⭐⭐</option>
+                <option value="⭐⭐⭐">⭐⭐⭐</option>
+                <option value="⭐⭐⭐⭐">⭐⭐⭐⭐</option>
+                <option value="⭐⭐⭐⭐⭐">⭐⭐⭐⭐⭐</option>
             </select>
         </div>
         <div class="form-floating mb-3">
-            <input type="email" class="form-control" id="floatingInput" placeholder="추천 이유">
+            <input type="text" class="form-control" id="movie-recommand" placeholder="추천 이유">
             <label for="floatingInput">추천 이유</label>
         </div>
-        <button type="button" class="btn btn-danger">기록하기</button>
+        <button onclick="makeCard()" type="button" class="btn btn-danger">기록하기</button>
     </div>
 
     <div class="mycards">
-        <div class="row row-cols-1 row-cols-md-4 g-4">
+        <div class="row row-cols-1 row-cols-md-4 g-4" id="movieCard">
             <div class="col">
               <div class="card h-100">
                 <img src="https://movie-phinf.pstatic.net/20210728_221/1627440327667GyoYj_JPEG/movie_image.jpg" class="card-img-top" alt="...">
