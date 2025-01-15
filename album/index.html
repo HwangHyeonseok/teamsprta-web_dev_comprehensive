@@ -68,6 +68,14 @@
     </style>
     
     <script>
+      $(document).ready(function () { // 실행 후 바로 실행
+        let url = "http://spartacodingclub.shop/sparta_api/seoulair";
+        fetch(url).then(res => res.json()).then(data => {
+            let mise = data['RealtimeCityAir']['row'][0]['IDEX_NM'];
+            $('#mise_info').text(mise);
+        })
+      })
+
       function memory_save_btn_click() {
         $('.mypostingbox').toggle();
       }
@@ -106,6 +114,7 @@
 <body>
     <div class="mytitle">
         <h1>나만의 추억앨범</h1>
+        <p>현재 서울의 미세먼지 : <span id="mise_info">나쁨</span></p>
         <button onclick="memory_save_btn_click()">추억 저장하기</button>
     </div>
 
