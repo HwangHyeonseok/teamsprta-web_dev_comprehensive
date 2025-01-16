@@ -5,32 +5,20 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>푸드파이터</title>
+    <title>푸드파이터 5주차 과제</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
-    <script src="../static/firebase2.js" type="module"></script>
     <style>
-        /* 3. 구글 폰트 import url 넣어주세요. */
-        @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Sans+KR:wght@100..900&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gowun+Dodum&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Sans+KR:wght@100..900&display=swap');
-        /* 3. 구글 폰트 CSS rules를 전체 적용해 주세요. */
+        @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gowun+Dodum&display=swap');
+
         * {
-            font-family: "Gowun Dodum", serif;
-            font-weight: 400;
-            font-style: normal;
+            font-family: 'Gowun Dodum', sans-serif;
         }
-        #title {
-            font-family: "Black Han Sans", serif;
-            font-weight: 400;
-            font-style: normal;
-        }
-        .header_content {
-            margin-left: 155px;
-        }
+
         body {
             background-color: white;
             color: black;
@@ -233,44 +221,94 @@
             margin-left: 150px;
             font-size: 1500px;
         }
-        .cards {
+
+        .food_cards {
             display: flex;  
             flex-direction: row;
             align-items: center;
             justify-content: center;
         }
     </style>
-    <script>
-        function makeCard() {
-            let food_img_url = $('#food_img_url').val();
-            let food_name = $('#food_name').val();
-            let food_star = $('#food_star').val();
-            let food_comment = $('#food_comment').val();
-            
-            // 참고
-            // 버거앤프라이즈 이미지 주소 - ./img/burgerandprize.jpg
-            // 김밥천국 이미지 주소 - ./img/gimbakchunguk.jpg
-            // 파파존스 이미지 주소 - ./img/papajohns.jpg
-            let temp_html = `
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+        // https://firebase.google.com/?hl=ko
+        // 1. 파이어베이스에 접속한 후 프로젝트 설정에 들어갑니다.
+        // 1. 본인 firebaseConfig 내용으로 설정해 줍니다.
+
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+        apiKey: "AIzaSyAonIKlQNJE1zS8mXs9iWbJBr5Bk1sL100",
+        authDomain: "sparta-f6035.firebaseapp.com",
+        projectId: "sparta-f6035",
+        storageBucket: "sparta-f6035.firebasestorage.app",
+        messagingSenderId: "379178653191",
+        appId: "1:379178653191:web:371e937b0c932e21dd3ca2",
+        measurementId: "G-LBY7RN58TE"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // 데이터 추가
+        $("#addBtn").click(async function () {
+
+            // 2. title_input, comment_input, image_input id를 가진 HTML 요소에서 값을 가져와서 title, comment, image 변수에 저장해 주세요.
+            let image = $('#img_url').val();
+            let title = $('#food_title').val();
+            let star = $('#star').val();
+            let comment = $('#recommand').val();
+
+            try {
+                const docRef = await addDoc(collection(db, "foods"), {
+
+                    // 2. 각각 담은 변수를 컬렉션 필드에 title, comment, image에 각각 넣어주세요.
+                    'image' : image,
+                    'title' : title,
+                    'star' : star,
+                    'comment' : comment
+                });
+
+                alert("음식이 추가 되었습니다!");
+                window.location.reload();
+            } catch (e) {
+                console.error("Error adding document: ", e);
+            }
+        });
+
+        // 3. 데이터 읽기 및 카드 생성
+        $(".row-cols-3").empty();
+        const querySnapshot = await getDocs(collection(db, "foods"));
+
+        querySnapshot.forEach((doc) => {
+
+            let title = doc.data().title;
+            let comment = doc.data().comment;
+            let star = "⭐".repeat(doc.data().star);
+            let image = doc.data().image;
+
+            // 3. 문서의 title, comment, image, star 필드에서 데이터를 추출한 변수명을 갖고,
+            // 3. tempHtml 문자열에 각 데이터를 포함한 카드의 HTML 코드를 생성하세요.
+            let tempHtml = `
                 <div class="col">
                     <div class="card h-100">
-                        <img src="${food_img_url}" class="card-img-top" alt="이미지 없음">
+                        <img src=${image}
+                            class="card-img-top" alt="...">
                         <div class="card-body">
-                            <h5 class="food_name">${food_name}</h5>
-                            <p class="food_star">${food_star}</p>
-                            <p class="food_content">${food_comment}</p>
-                            <button type="button" class="btn btn-warning card-button">주문하기</button>
+                            <h4 class="card-title">${title}</h4>
+                            <p class="card-text">${comment}</p>
+                            <p>${star}</p>
                         </div>
                     </div>
                 </div>
             `;
 
-            $('#food_cards').append(temp_html);
-            $('#food_img_url').val('');
-            $('#food_name').val('');
-            $('#food_star').val('');
-            $('#food_comment').val('');
-        }
+            $(".row-cols-3").append(tempHtml);
+        });
+
     </script>
 </head>
 
@@ -285,7 +323,8 @@
                     </svg>
                 </a>
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <img src="https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/food.png" class="icon"></li>
+                    <img src="https://s3.ap-northeast-2.amazonaws.com/materials.spartacodingclub.kr/food.png"
+                        class="icon"></li>
                     <li><a href="#" class="nav-link px-2 text-danger">Foodcourt</a></li>
                     <li><a href="#" class="nav-link px-2 ">홈</a></li>
                     <li><a href="#" class="nav-link px-2 ">한식</a></li>
@@ -305,95 +344,96 @@
         </div>
     </header>
 
-    <!-- 1. 점보 트론 적용 jumbotron -->
-    <!-- - https://getbootstrap.com/
-    - Bootstrap 사이트에서 jumbotron가져와 vscode에 붙여 넣어주세요.
-    - 배경 이미지 적용을 위해 <div class="header"> 로 감싸주세요.
-    - jumbotron의 내용을 예시사진과 똑같게 내용을 변경해 주세요.
-        - 필요 없는 버튼, div를 적절하게 삭제
-    - jumbotron <h1> 태그안에 `Blank Han Sans` 폰트 스타일을 적용해 주세요. -->
-
+    <!-- 점보 트론 적용 jumbotron -->
     <div class="header">
-        <div class="container-fluid py-5">
-            <div class="header_content">
-                <h1 class="display-5 fw-bold" id="title">스파르타 푸드파이터</h1>
-                <p class="col-md-8 fs-4">본인만의 맛집을 소개하는 사이트입니다.<br>맛집을 소개 주세요!</p>
-            </div>
-            <!-- 부트스트랩 인풋 박스 적용-->
-            <div class="post" id="input-card">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="food_img_url" placeholder="name@example.com">
-                    <label for="floatingInput">음식 이미지 주소</label>
+        <div class="p-5 mb-4 bg-body-tertiary rounded-3">
+            <div class="container-fluid py-5">
+                <div class="jumbotron-message">
+                    <h1 class="display-5 fw-bold" style="font-family: 'Black Han Sans', sans-serif; ">스파르타 푸드파이터
+                    </h1>
+                    <p class="col-md-8 fs-4"> 본인만의 맛집을 소개하는 사이트입니다.
+                        <br>맛집을 소개해 주세요!
+                    </p>
                 </div>
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="food_name" placeholder="영화 제목">
-                    <label for="foodTitle">음식명</label>
-                </div>
-                <div class="input-group mb-3">
-                    <button class="btn btn-outline-secondary" type="text">별점</button>
-                    <select class="form-select" id="food_star" aria-label="Example select with button addon">
-                        <option selected>별점 선택</option>
-                        <option value="⭐">⭐</option>
-                        <option value="⭐⭐">⭐⭐</option>
-                        <option value="⭐⭐⭐">⭐⭐⭐</option>
-                        <option value="⭐⭐⭐⭐">⭐⭐⭐⭐</option>
-                        <option value="⭐⭐⭐⭐⭐">⭐⭐⭐⭐⭐</option>
-                    </select>
-                </div>
-                <div class="form-floating">
-                    <textarea class="form-control" placeholder="Ex.음식이 맛있어요." id="food_comment"></textarea>
-                    <label for="floatingTextarea">추천 이유</label>
-                </div>
-                <div class="button2">
-                    <button onclick="makeCard()" type="button" class="btn btn-danger" id="addBtn"> 기록하기 </button>
+
+                <!-- 부트스트랩 인풋 박스 적용-->
+                <div class="post" id="input-card">
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control" id="img_url" placeholder="name@example.com">
+                        <label for="floatingInput">음식 이미지 주소</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="food_title" placeholder="음식 제목">
+                        <label for="foodTitle">음식명</label>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <button class="btn btn-outline-secondary" type="button">별점</button>
+                        <select class="form-select" id="star"
+                            aria-label="Example select with button addon">
+                            <option selected>별점 선택</option>
+                            <option value="1">⭐</option>
+                            <option value="2">⭐⭐</option>
+                            <option value="3">⭐⭐⭐</option>
+                            <option value="4">⭐⭐⭐⭐</option>
+                            <option value="5">⭐⭐⭐⭐⭐</option>
+                        </select>
+                    </div>
+                    <div class="form-floating">
+                        <textarea class="form-control" placeholder="Leave a comment here"
+                            id="recommand"></textarea>
+                        <label for="floatingTextarea">추천 이유</label>
+                    </div>
+                    <div class="button2">
+                        <button type="button" class="btn btn-danger" id="addBtn"> 기록하기 </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 2. 부트스트랩 카드 적용-->
+
+    <!-- 부트스트랩 카드 적용-->
     <div class="mycards">
-        <!-- - https://getbootstrap.com/
-        - Bootstrap 사이트에서 cards 가져와 vscode에 붙여 넣기
-        - *Docs → Card → Grid cards에서 3번째 코드입니다.*
-        - <button> 태그를 생성해 주세요.
-        - <button> 태그안에 `card-button` 클래스를 부여해 주세요.
-        - 카드에 내용은 자유롭게 채워 주세요. -->
-        <div class="row row-cols-1 row-cols-md-5 g-4 cards" id="food_cards">
+        <div class="row row-cols-3 row-cols-md-5 food_cards">
             <div class="col">
                 <div class="card h-100">
-                    <img src="./img/gimbakchunguk.jpg" class="card-img-top" alt="이미지 없음">
+                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2162&q=80"
+                        class="card-img-top" alt="...">
                     <div class="card-body">
-                        <h5 class="food_name">김밥천국</h5>
-                        <p class="food_star">⭐⭐⭐</p>
-                        <p class="food_content">천국에서 온 것 같은 맛</p>
-                        <button type="button" class="btn btn-warning card-button">주문하기</button>
+                        <h4 class="card-title">하와이안 피자</h4>
+                        <p class="card-text">이건 꼭 먹어봐야 해요</p>
+                        <p>⭐⭐⭐⭐</p>
+                        <button class="card-button">주문하기</button>
                     </div>
                 </div>
             </div>
             <div class="col">
                 <div class="card h-100">
-                    <img src="./img/burgerandprize.jpg" class="card-img-top" alt="이미지 없음">
+                    <img src="https://images.unsplash.com/photo-1481070555726-e2fe8357725c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2235&q=80"
+                        class="card-img-top" alt="...">
                     <div class="card-body">
-                        <h5 class="food_name">버거앤프라이즈</h5>
-                        <p class="food_star">⭐⭐⭐⭐⭐</p>
-                        <p class="food_content">육즙이 흘러나온다. 맛있다. 얌미하움.</p>
-                        <button type="button" class="btn btn-warning card-button">주문하기</button>
+                        <h4 class="card-title">크리스피 버거</h4>
+                        <p class="card-text">너무 달콤해요!</p>
+                        <p>⭐⭐⭐</p>
+                        <button class="card-button">주문하기</button>
                     </div>
                 </div>
             </div>
             <div class="col">
                 <div class="card h-100">
-                    <img src="./img/papajohns.jpg" class="card-img-top" alt="이미지 없음">
+                    <img src="https://images.unsplash.com/photo-1569718212165-3a8278d5f624?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2080&q=80"
+                        class="card-img-top" alt="...">
                     <div class="card-body">
-                        <h5 class="food_name">파파존스</h5>
-                        <p class="food_star">⭐⭐⭐⭐</p>
-                        <p class="food_content">아버지도 반한 그 맛</p>
-                        <button type="button" class="btn btn-warning card-button">주문하기</button>
+                        <h4 class="card-title">해물 라면</h4>
+                        <p class="card-text">국물이 끝내줘요!</p>
+                        <p>⭐⭐⭐⭐⭐</p>
+                        <button class="card-button">주문하기</button>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
     <div class="container2">
@@ -401,7 +441,7 @@
             <div class="col mb-3">
                 <a href="/" class="d-flex align-items-center mb-3 link-body-emphasis text-decoration-none">
                 </a>
-                <p class="text-body-secondary">@hyeonseok 2025</p>
+                <p class="text-body-secondary">©Teamsparta 2024</p>
             </div>
             <div class="col mb-3">
             </div>
