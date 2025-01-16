@@ -4,7 +4,7 @@
 ## 배포용 : main branch
 ## 로컬 개발용 : local branch
 
-## album :
+## album/index.html :
 ### https://hwanghyeonseok.github.io/teamsprta-web_dev_comprehensive/album/index.html
 [HTML+CSS]
 - 1-11 [추억앨범]프로젝트 1
@@ -26,7 +26,7 @@
 - 5-7 배포한 것 수정하기 및 주의 사항
 참고 : fetch 데이터를 받을 때 강의에서는 HTTP를 사용하지만, GitHub Pages 정책 상 HTTPS만 받아올 수 있으므로 배포판은 fetch 적용이 되지 않았음.
 
-## spartaflix : 
+## spartaflix/index.html : 
 ### https://hwanghyeonseok.github.io/teamsprta-web_dev_comprehensive/spartaflix/index.html
 [HTML+CSS]
 - 2-2 [스파르타플릭스] 프로젝트 1
@@ -47,5 +47,11 @@
 - 5-7 배포한 것 수정하기 및 주의 사항
 참고 : fetch 데이터를 받을 때 강의에서는 HTTP를 사용하지만, GitHub Pages 정책 상 HTTPS만 받아올 수 있으므로 배포판은 fetch 적용이 되지 않았음.
 
-## homework/3week_homework :
-- 3주차 HTML, CSS를 활용하여 화면 만들기 + (자체적으로 jQuery를 사용하여 음식 추가 기능 구현)
+## 3week_homework/index.html :
+### https://hwanghyeonseok.github.io/teamsprta-web_dev_comprehensive/3week_homework/index.html
+- 3주차 숙제 HTML, CSS를 활용하여 화면 만들기 + (자체적으로 jQuery를 사용하여 음식 추가 기능 구현)
+
+
+## 5week_homework/index.html :
+### https://hwanghyeonseok.github.io/teamsprta-web_dev_comprehensive/5week_homework/index.html
+- 5주차 숙제 javascript + firebase 를 활용하여 데이터 추가 + 데이터베이스에 저장 + 데이터 화면에 뿌려주기
