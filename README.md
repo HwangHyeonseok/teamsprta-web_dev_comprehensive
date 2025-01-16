@@ -29,6 +29,8 @@
 
 [Firebase]
 - 4-4 Firestore Database 시작하기
+- 5-2 [addDoc] 영화 데이터 넣기
+- 5-3 [getDocs] Firestore Database에서 데이터 가져오기
 
 
 ## homework/3week_homework :

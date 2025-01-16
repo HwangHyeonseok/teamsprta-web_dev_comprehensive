@@ -54,29 +54,75 @@
         }
     </style>
 
-    <script>
-        $(document).ready(function(){
-            let url = 'http://spartacodingclub.shop/sparta_api/weather/seoul';
-            fetch(url).
-            then(res => res.json()).
-            then(data => {
-                let temp = data['temp'];
-                $('#temperature').text(temp);
-            })
-        });
+    <script type="module">
+        // Firebase 정보 파일에서 정보 가져오기 (config/firebaseConfig.js)
+        import { firebaseConfig } from "../config/firebaseConfig.js";
+
+        // ⭐⭐⭐ Firebase SDK 라이브러리 가져오기
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+        // ⭐⭐⭐ Firebase 구성 정보 설정 (firestore database 들어가서 확인)
+        // 현재 숨긴 상태, config/firebaseConfig.js에 숨겨 놓음.
+        // const firebaseConfig = {
+        //     apiKey: "apiKey 값",
+        //     authDomain: "authDomain 값",
+        //     projectId: "projectId 값",
+        //     storageBucket: "storageBucket 값",
+        //     messagingSenderId: "messagingSenderId 값",
+        //     appId: "appId 값",
+        //     measurementId: "measurementId 값"
+        // };
+
+        // ⭐⭐⭐ Firebase 인스턴스 초기화
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
 
-
-        
-
-        function record() {
+        let url = 'http://spartacodingclub.shop/sparta_api/weather/seoul';
+        fetch(url).
+        then(res => res.json()).
+        then(data => {
+            let temp = data['temp'];
+            $('#temperature').text(temp);
+        })
+        // 영화 기록하기 버튼 클릭 시
+        $("#movieRecordBtn").click(async function () {
             $('.mypostingbox').toggle();
-        }
-        function makeCard() {
+        })
+
+        // 기록하기 버튼 클릭 시 -> DB에 저장
+        $('#recordBtn').click(async function () {
             let imgUrl = $('#movie-imgUrl').val();
             let title = $('#movie-title').val();
             let star = $('#movie-star').val();
             let recommand = $('#movie-recommand').val();
+
+            let doc = {
+                'imgUrl':imgUrl,
+                'title':title,
+                'star':star,
+                'recommand':recommand
+            };
+            await addDoc(collection(db, "movies"), doc);
+            
+            alert('기록 되었습니다.');
+            window.location.reload();
+            $('.mypostingbox').toggle();
+        })
+
+        // db에 있는거 가져와서 화면에 보여주기
+        let docs = await getDocs(collection(db, "movies"));
+
+        docs.forEach(d => {
+            let row = d.data();
+            
+            let imgUrl = row['imgUrl'];
+            let title = row['title'];
+            let star = row['star'];
+            let recommand = row['recommand'];
 
             let temp_html = `
                 <div class="col">
@@ -92,15 +138,7 @@
             `;
             
             $('#movieCard').append(temp_html);
-            
-            // 값을 비우는 방법 
-            $('#movie-imgUrl').val('');
-            $('#movie-title').val('');
-            $('#movie-star').val('');
-            $('#movie-recommand').val('');
-
-            $('.mypostingbox').toggle();
-        }
+        });
     </script>
 </head>
 <body>
@@ -137,7 +175,7 @@
             <div class="container-fluid py-5">
                 <h1 id="title" class="display-5 fw-bold">킹덤</h1>
                 <p class="col-md-8 fs-4">병든 왕을 둘러싸고 흉흉한 소문이 떠돈다. 어둠에 뒤덮인 조선, 기이한 역병에 신음하는 산하. 정체 모를 악에 맞서 백성을 구원할 희망은 오직 세자뿐이다.</p>
-                <button onclick="record()" type="button" class="btn btn-outline-light">영화 기록하기</button>
+                <button id="movieRecordBtn" type="button" class="btn btn-outline-light">영화 기록하기</button>
                 <button type="button" class="btn btn-outline-light">상세 정보</button>
             </div>
         </div>
@@ -167,7 +205,7 @@
             <input type="text" class="form-control" id="movie-recommand" placeholder="추천 이유">
             <label for="floatingInput">추천 이유</label>
         </div>
-        <button onclick="makeCard()" type="button" class="btn btn-danger">기록하기</button>
+        <button id="recordBtn" type="button" class="btn btn-danger">기록하기</button>
     </div>
 
     <div class="mycards">
