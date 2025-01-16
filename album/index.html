@@ -54,7 +54,6 @@
           padding: 20px;
           box-shadow: 0px 0px 3px 0px blue;
           border-radius: 5px;
-          display: none;
         }
         .mybtn {
             display: flex;  
@@ -81,6 +80,24 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    $("#postingbtn").click(async function () {
+      let image = $('#image').val();
+      let title = $('#title').val();
+      let content = $('#content').val();
+      let date = $('#date').val();
+
+      let doc = {
+        'image':image,
+        'title':title,
+        'content':content,
+        'date':date
+      };
+      await addDoc(collection(db, "albums"), doc);
+
+      alert('저장 되었습니다.');
+      window.location.reload(); // 새로 고침
+    })
+
       $(document).ready(function () { // 실행 후 바로 실행
         let url = "http://spartacodingclub.shop/sparta_api/seoulair";
         fetch(url).then(res => res.json()).then(data => {
@@ -98,10 +115,7 @@
       }
 
       function makeCard() {
-        let image = $('#image').val();
-        let title = $('#title').val();
-        let content = $('#content').val();
-        let date = $('#date').val();
+
         
         let temp_html = `
         <div class="col">
@@ -149,7 +163,7 @@
         <label for="floatingInput">앨범 날짜</label>
       </div>
       <div class="mybtn">
-        <button onclick="makeCard()" type="button" class="btn btn-dark">기록하기</button>
+        <button id="postingbtn" type="button" class="btn btn-dark">기록하기</button>
         <button onclick="close_btn_click()" type="button" class="btn btn-outline-dark">닫기</button>
       </div>
     </div>
