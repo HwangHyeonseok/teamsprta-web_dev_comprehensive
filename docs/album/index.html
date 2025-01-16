@@ -102,7 +102,7 @@
       $('.mypostingbox').toggle();
     })
 
-      let url = "https://spartacodingclub.shop/sparta_api/seoulair"; // 원래는 http://spartacodingclub.shop/sparta_api/seoulair 로 해야 작동함
+      let url = "http://spartacodingclub.shop/sparta_api/seoulair"; // 원래는 http://spartacodingclub.shop/sparta_api/seoulair 로 해야 작동함
       fetch(url).then(res => res.json()).then(data => {
           let mise = data['RealtimeCityAir']['row'][0]['IDEX_NM'];
           $('#mise_info').text(mise);
