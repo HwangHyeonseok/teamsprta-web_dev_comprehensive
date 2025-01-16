@@ -1,8 +1,8 @@
 # 팀스파르타 [왕초보] 웹개발 종합반 커리큘럼
 강의 링크 : https://online.spartacodingclub.kr/enrolleds/67852e956df5cd9a6148b147/rounds/677b4bb1711896fc7b5a6d0e/roadmap
 
-# 배포용 : main branch
-# 로컬 개발용 : local branch
+## 배포용 : main branch
+## 로컬 개발용 : local branch
 
 ## album :
 ### https://hwanghyeonseok.github.io/teamsprta-web_dev_comprehensive/album/index.html
