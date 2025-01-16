@@ -81,7 +81,7 @@
         const db = getFirestore(app);
 
 
-        let url = 'http://spartacodingclub.shop/sparta_api/weather/seoul';
+        let url = 'https://spartacodingclub.shop/sparta_api/weather/seoul'; // 원래는 http://spartacodingclub.shop/sparta_api/weather/seoul 로 해야 작동함.
         fetch(url).
         then(res => res.json()).
         then(data => {
@@ -155,7 +155,7 @@
               <li><a href="#" class="nav-link px-2 text-white">시리즈</a></li>
               <li><a href="#" class="nav-link px-2 text-white">영화</a></li>
               <li><a href="#" class="nav-link px-2 text-white">내가 찜한 콘텐츠</a></li>
-              <li><a href="#" class="nav-link px-2 text-white">현재 서울의 날씨: <span id="temperature"></span>도</a></li>
+              <li><a href="#" class="nav-link px-2 text-white">현재 서울의 날씨: <span id="temperature">20</span>도</a></li>
             </ul>
     
             <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
